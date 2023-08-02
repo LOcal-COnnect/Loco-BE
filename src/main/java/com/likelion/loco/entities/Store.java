@@ -18,12 +18,12 @@ public class Store extends BaseEntity {
     @Column(name = "storeIdx")
     private Long storeIdx;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user")
-    private User user;
+    @OneToOne
+    @JoinColumn(name = "SellerIdx")
+    private Seller seller;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "subCategory")
+    @JoinColumn(name = "subCategoryIdx")
     private SubCategory subCategory;
 
     @Column(name = "storeName", nullable = false)

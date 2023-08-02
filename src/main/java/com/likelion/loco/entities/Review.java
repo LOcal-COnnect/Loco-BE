@@ -16,15 +16,17 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewIdx;
 
-    @Column(name="review_content")
+    @ManyToOne
+    @JoinColumn(name = "userIdx")
+    private User user;
+
+    @Column(name="reviewContent", nullable = false)
     private String reviewContent;
 
-    @Column(name="review_star")
+    @Column(name="reviewStar", nullable = false)
     private Integer reviewStar;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
 
 
 

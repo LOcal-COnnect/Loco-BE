@@ -17,25 +17,22 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
-    @Column(name="user_name")
+    @Column(name="userName",nullable = false)
     private String userName;
 
-    @Column(name="user_password")
+    @Column(name="userPassword",nullable = false)
     private String userPassword;
 
-    @Column(name = "user_email")
+    @Column(name = "userEmail",nullable = false)
     private String userEmail;
 
-    @Column(name="role")
-    private Enum role;
-
-    @Column(name="user_phone")
+    @Column(name="userPhone",nullable = false)
     private String userPhone;
 
-    @Column(name="user_address")
+    @Column(name="userAddress",nullable = false)
     private String userAddress;
 
-    @Column(name = "user_detail_address")
+    @Column(name = "userDetailAddress",nullable = false)
     private String userDetailAddress;
 
 

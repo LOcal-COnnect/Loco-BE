@@ -18,10 +18,10 @@ public class StoreMine extends BaseEntity {
     private Long storeMineIdx;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "userIdx")
     private User user;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "store")
+    @JoinColumn(name = "storeIdx")
     private Store store;
 }
