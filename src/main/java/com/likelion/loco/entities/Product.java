@@ -18,7 +18,7 @@ public class Product extends BaseEntity {
     private Long productIdx;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "store")
+    @JoinColumn(name = "storeIdx")
     private Store store;
 
     @Column(name = "productName", nullable = false)

@@ -16,10 +16,14 @@ public class Post extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postIdx;
 
-    @Column(name = "post_title")
+    @ManyToOne
+    @JoinColumn(name = "sellerIdx")
+    private User seller;
+
+    @Column(name = "postTitle", nullable = false)
     private String postTitle;
 
-    @Column(name = "post_content")
+    @Column(name = "postContent", nullable = false)
     private String postContent;
 
 }

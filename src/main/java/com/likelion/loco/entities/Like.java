@@ -18,11 +18,11 @@ public class Like extends BaseEntity {
     private Long likeIdx;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="userIdx")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="post_id")
+    @JoinColumn(name="postIdx")
     private Post post;
 
 }

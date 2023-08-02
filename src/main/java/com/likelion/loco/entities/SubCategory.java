@@ -17,7 +17,7 @@ public class SubCategory {
     private Long subCategoryIdx;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "mainCategory")
+    @JoinColumn(name = "mainCategoryIdx")
     private MainCategory mainCategory;
 
     @Column(name = "subCategoryName", nullable = false)
