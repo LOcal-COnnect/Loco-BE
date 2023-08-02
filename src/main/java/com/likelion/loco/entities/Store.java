@@ -3,7 +3,7 @@ package com.likelion.loco.entities;
 import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -12,4 +12,36 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Store extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "storeIdx")
+    private Long storeIdx;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user")
+    private User user;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "subCategory")
+    private SubCategory subCategory;
+
+    @Column(name = "storeName", nullable = false)
+    private String storeName;
+
+    @Column(name = "storePhone", nullable = false)
+    private String storePhone;
+
+    @Column(name = "storeTel", nullable = false)
+    private String storeTel;
+
+    @Column(name = "storeDesc", nullable = false)
+    private String storeDesc;
+
+    @Column(name = "storeLocation", nullable = false)
+    private String storeLocation;
+
+    @Column(name = "businessNumber", nullable = false)
+    private Integer businessNumber;
+
 }

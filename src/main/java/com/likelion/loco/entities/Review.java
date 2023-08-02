@@ -12,4 +12,6 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Review extends BaseEntity {
+
+
 }
