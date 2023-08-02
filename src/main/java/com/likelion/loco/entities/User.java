@@ -12,4 +12,5 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity {
+
 }
