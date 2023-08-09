@@ -1,0 +1,28 @@
+spring:
+  # swagger
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/loco
+    username: root
+    password: 1234
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true # hibernate 로그 남길지
+
+logging:
+  level:
+    org.hibernate.SQL: OFF
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.SQL: TRACE
+
+#jwt:
+#  secret: as12312adas213
