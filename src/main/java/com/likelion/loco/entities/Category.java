@@ -10,16 +10,12 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubCategory {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "subCategoryIdx")
-    private Long subCategoryIdx;
+    @Column(name = "CategoryIdx")
+    private Long categoryIdx;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "mainCategoryIdx")
-    private MainCategory mainCategory;
-
-    @Column(name = "subCategoryName", nullable = false)
-    private String subCategoryName;
+    @Column(name = "CategoryName", nullable = false)
+    private String categoryName;
 }

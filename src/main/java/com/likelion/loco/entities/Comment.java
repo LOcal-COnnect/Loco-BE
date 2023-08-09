@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Commnet extends BaseEntity {
+public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentIdx;
@@ -24,6 +24,6 @@ public class Commnet extends BaseEntity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="postIdx")
-    private Post post;
+    @JoinColumn(name="promotionIdx")
+    private Promotion promotion;
 }

@@ -11,19 +11,19 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post extends BaseEntity {
+public class Promotion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postIdx;
+    private Long promotionIdx;
 
     @ManyToOne
     @JoinColumn(name = "sellerIdx")
     private User seller;
 
-    @Column(name = "postTitle", nullable = false)
-    private String postTitle;
+    @Column(name = "promotionTitle", nullable = false)
+    private String promotionTitle;
 
     @Column(name = "postContent", nullable = false)
-    private String postContent;
+    private String promotionContent;
 
 }

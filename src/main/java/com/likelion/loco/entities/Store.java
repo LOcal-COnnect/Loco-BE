@@ -24,7 +24,7 @@ public class Store extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "subCategoryIdx")
-    private SubCategory subCategory;
+    private Category Category;
 
     @Column(name = "storeName", nullable = false)
     private String storeName;
