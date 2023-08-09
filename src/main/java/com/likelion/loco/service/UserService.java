@@ -18,9 +18,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-    private User findUser(String userId) {
-        return userRepository.findByUserId(userId)
-                .orElseThrow(() -> ExceptionUtil.id(userId, User.class.getName()));
+    private boolean doesUserExist(String userId) {
+        return userRepository.findByUserId(userId).isPresent();
     }
 
     public UserService(UserRepository userRepository) {
@@ -29,9 +28,15 @@ public class UserService {
 
     public BaseResponseStatus userRegister(UserReq.UserCreateReq userCreateReq){
         try{
-            userCreateReq.setUserPassword(bCryptPasswordEncoder.encode(userCreateReq.getUserPassword()));
-            userRepository.save(userCreateReq.toEntity());
-            return BaseResponseStatus.SUCCESS;
+            if(!doesUserExist(userCreateReq.getUserId())){ //이미 있는 유저가 아니라면
+                userCreateReq.setUserPassword(bCryptPasswordEncoder.encode(userCreateReq.getUserPassword()));
+                userRepository.save(userCreateReq.toEntity());
+                return BaseResponseStatus.SUCCESS;
+            }
+            else{
+                return BaseResponseStatus.USERS_ALREADY_EXIST;
+            }
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -44,7 +49,7 @@ public class UserService {
             Optional<User> user = userRepository.findByUserId(userLoginReq.getUserId()); //암호화 해서 둘이 같은지 확인
             if (user.isPresent()){ //유저가 존재한다면.
                 User user1 = user.get();
-                if(user1.getUserPassword() == bCryptPasswordEncoder.encode(userLoginReq.getUserPassword())){
+                if(bCryptPasswordEncoder.matches(userLoginReq.getUserPassword(), user1.getUserPassword())){
                     return BaseResponseStatus.SUCCESS;
                 }
                 else { //비밀번호가 틀렸을시;

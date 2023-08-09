@@ -12,6 +12,7 @@ public class StoreReq {
     @Getter
     @Setter
     public static class StoreCreateReq{
+        private String storeName;
     }
 
     @NoArgsConstructor
@@ -19,6 +20,6 @@ public class StoreReq {
     @Getter
     @Setter
     public static class StorePromotionCreateReq{
-
+        private String storeName;
     }
 }

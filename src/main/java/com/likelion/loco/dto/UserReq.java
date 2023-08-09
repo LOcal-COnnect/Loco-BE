@@ -24,7 +24,7 @@ public class UserReq {
         public User toEntity(){
             return User.builder()
                     .userId(this.userId)
-                    .userName(this.userPassword)
+                    .userName(this.userName)
                     .userPassword(this.userPassword)
                     .userEmail(this.userEmail)
                     .userPhone(this.userPhone)

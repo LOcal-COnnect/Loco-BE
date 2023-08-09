@@ -18,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public BaseResponseStatus userLogin(@RequestBody UserReq.UserLoginReq userLoginReq){
         try{
             return userService.userLogin(userLoginReq);
@@ -28,7 +28,7 @@ public class UserController {
         return null;
 
     }
-    @PostMapping
+    @PostMapping("/join")
     public BaseResponseStatus userRegister(@RequestBody UserReq.UserCreateReq userCreateReq){
         try{
             return userService.userRegister(userCreateReq);
