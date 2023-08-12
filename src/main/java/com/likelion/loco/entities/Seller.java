@@ -17,9 +17,6 @@ public class Seller extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sellerIdx;
 
-    @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
-    private Store store;
-
     @Column(name="sellerName", nullable = false)
     private String sellerName;
 

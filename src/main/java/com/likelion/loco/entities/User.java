@@ -39,6 +39,8 @@ public class User extends BaseEntity {
     private String userDetailAddress;
 
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Store store;
 
 
 }

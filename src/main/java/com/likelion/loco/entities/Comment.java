@@ -1,5 +1,6 @@
 package com.likelion.loco.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
@@ -19,10 +20,17 @@ public class Comment extends BaseEntity {
     @Column(name="commentContent", nullable = false)
     private String commentContent;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="userIdx")
     private User user;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="sellerIdx")
+    private Seller seller;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="promotionIdx")
     private Promotion promotion;

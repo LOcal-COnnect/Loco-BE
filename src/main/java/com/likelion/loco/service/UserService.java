@@ -69,13 +69,21 @@ public class UserService {
     public BaseResponseStatus userUpdate(Long userIdx, UserReq.UserUpdateReq userUpdateReq) {
         try{
             Optional<User> user = userRepository.findByUserIdx(userIdx);
+            System.out.println(user.get().getUserId());
+            System.out.println(userUpdateReq.getUserId());
+            System.out.println(userUpdateReq.getUserName());
             if (user.isPresent()){
                 User user1 = user.get();
                 user1.setUserName(userUpdateReq.getUserName());
+                user1.setUserId(userUpdateReq.getUserId());
                 user1.setUserPassword(bCryptPasswordEncoder.encode(userUpdateReq.getUserPassword()));
                 user1.setUserEmail(userUpdateReq.getUserEmail());
                 user1.setUserAddress(userUpdateReq.getUserAddress());
                 user1.setUserDetailAddress(userUpdateReq.getUserDetailAddress());
+                user1.setUserPhone(userUpdateReq.getUserPhone());
+
+
+                userRepository.save(user1);
 
                 return BaseResponseStatus.SUCCESS;
 
