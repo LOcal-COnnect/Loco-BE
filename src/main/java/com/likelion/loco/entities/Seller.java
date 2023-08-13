@@ -36,6 +36,4 @@ public class Seller extends BaseEntity {
     private String sellerDetailAddress;
 
 
-
-
 }

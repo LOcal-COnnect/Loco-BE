@@ -23,12 +23,6 @@ public class ReviewService {
 
     public BaseResponseStatus createReview(Long userIdx, Long storeIdx, ReviewReq.reviewCreateReq reviewCreateReq){
         try{
-            System.out.println(userIdx);
-            System.out.println(storeIdx);
-            System.out.println(reviewCreateReq.getReviewContent());
-            System.out.println(reviewCreateReq.getReviewStar());
-            System.out.println(userRepository.findByUserIdx(userIdx).get().getUserName());
-            System.out.println(storeRepository.findById(storeIdx).get().getStoreName());
             reviewRepository.save(reviewCreateReq.toEntity(userRepository.findByUserIdx(userIdx).get(),storeRepository.findById(storeIdx).get()));
             return BaseResponseStatus.SUCCESS;
 
