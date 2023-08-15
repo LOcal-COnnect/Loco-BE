@@ -59,5 +59,14 @@ public class StoreMineController {
         }
         return null;
     }
+    @DeleteMapping("/{userIdx}/store/{storeIdx}")
+    public void deleteMyMineStore(@PathVariable("userIdx") Long userIdx, @PathVariable("storeIdx") Long storeIdx){
+        try{
+            storeMineService.deleteStoreMine(userIdx,storeIdx);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 
 }

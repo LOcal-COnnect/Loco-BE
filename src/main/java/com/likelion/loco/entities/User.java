@@ -1,6 +1,7 @@
 package com.likelion.loco.entities;
 
 import com.likelion.loco.global.BaseEntity;
+import com.likelion.loco.global.enums.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -39,8 +40,8 @@ public class User extends BaseEntity {
     private String userDetailAddress;
 
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Store store;
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
 
 
 }

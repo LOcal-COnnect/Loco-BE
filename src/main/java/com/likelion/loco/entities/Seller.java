@@ -1,6 +1,7 @@
 package com.likelion.loco.entities;
 
 import com.likelion.loco.global.BaseEntity;
+import com.likelion.loco.global.enums.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,9 @@ public class Seller extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sellerIdx;
 
+    @Column(name="sellerId", nullable = false)
+    private String sellerId;
+
     @Column(name="sellerName", nullable = false)
     private String sellerName;
 
@@ -29,11 +33,13 @@ public class Seller extends BaseEntity {
     @Column(name="sellerPhone",nullable = false)
     private String sellerPhone;
 
-    @Column(name="sellerAddress",nullable = false)
-    private String sellerAddress;
+    @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
+    private Store store;
 
-    @Column(name = "sellerDetailAddress",nullable = false)
-    private String sellerDetailAddress;
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
+
+
 
 
 }

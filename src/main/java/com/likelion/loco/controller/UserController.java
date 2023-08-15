@@ -1,10 +1,13 @@
 package com.likelion.loco.controller;
 
+import com.likelion.loco.dto.SellerReq;
 import com.likelion.loco.dto.UserReq;
 import com.likelion.loco.dto.UserRes;
 import com.likelion.loco.global.BaseEntity;
 import com.likelion.loco.global.BaseResponseStatus;
+import com.likelion.loco.jwt.TokenProvider;
 import com.likelion.loco.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,15 +16,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final TokenProvider tokenProvider;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, TokenProvider tokenProvider) {
         this.userService = userService;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/login")
-    public BaseResponseStatus userLogin(@RequestBody UserReq.UserLoginReq userLoginReq){
-        try{
-            return userService.userLogin(userLoginReq);
+    public String userLogin(@RequestBody UserReq.LoginReq userLoginReq){
+        try{;
+            return userService.Login(userLoginReq);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -39,6 +44,21 @@ public class UserController {
         return null;
 
     }
+    @PostMapping("/sellers/join")
+    public BaseResponseStatus sellerRegister(@RequestBody SellerReq.SellerCreateReq sellerCreateReq){
+        try{
+            return userService.sellerRegister(sellerCreateReq);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
+
+
     @GetMapping("{useridx}")
     public UserRes.UserGetRes getUserInfo(@PathVariable("useridx") Long userIdx){
         try{
@@ -51,9 +71,20 @@ public class UserController {
 
     }
     @PatchMapping("{useridx}")
-    public BaseResponseStatus getUserInfo(@PathVariable("useridx") Long userIdx, @RequestBody UserReq.UserUpdateReq userUpdateReq){
+    public BaseResponseStatus updateUserInfo(@PathVariable("useridx") Long userIdx, @RequestBody UserReq.UserUpdateReq userUpdateReq){
         try{
             return userService.userUpdate(userIdx, userUpdateReq);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+    @PatchMapping("/sellers/{sellerIdx}")
+    public BaseResponseStatus updateSellerInfo(@PathVariable("sellerIdx") Long sellerIdx, @RequestBody SellerReq.SellerUpdateReq sellerUpdateReq){
+        try{
+            return userService.sellerUpdate(sellerIdx, sellerUpdateReq);
 
         }catch (Exception e){
             e.printStackTrace();

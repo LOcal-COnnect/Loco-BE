@@ -14,4 +14,13 @@ public class UserRes {
     public static class UserGetRes{
         private User user;
     }
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class LoginRes{
+        private String jwtToken;
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.likelion.loco.dto;
 
 import com.likelion.loco.entities.User;
+import com.likelion.loco.global.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,8 @@ public class UserReq {
         private String userAddress;
         private String userDetailAddress;
 
-        public User toEntity(){
+
+        public User toEntity(RoleType roleType){
             return User.builder()
                     .userId(this.userId)
                     .userName(this.userName)
@@ -30,6 +32,7 @@ public class UserReq {
                     .userPhone(this.userPhone)
                     .userAddress(this.userAddress)
                     .userDetailAddress(this.userDetailAddress)
+                    .roleType(roleType)
                     .build();
         }
 
@@ -55,11 +58,10 @@ public class UserReq {
     @AllArgsConstructor
     @Getter
     @Setter
-    public static class UserLoginReq {
+    public static class LoginReq {
         private String userId;
         private String userPassword;
 
     }
-
 
 }

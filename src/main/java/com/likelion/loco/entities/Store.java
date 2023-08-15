@@ -19,18 +19,14 @@ public class Store extends BaseEntity {
     @Column(name = "storeIdx")
     private Long storeIdx;
 
-//    @OneToOne
-//    @JoinColumn(name = "SellerIdx")
-//    private Seller seller;
-
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name="userIdx")
-    private User user;
+    @JoinColumn(name = "SellerIdx")
+    private Seller seller;
 
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "CategoryIdx")
-//    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "CategoryIdx")
+    private Category category;
 
     @Column(name = "storeName", nullable = false)
     private String storeName;
@@ -44,10 +40,13 @@ public class Store extends BaseEntity {
     @Column(name = "storeDesc", nullable = false)
     private String storeDesc;
 
-    @Column(name = "storeLocation", nullable = false)
-    private String storeLocation;
+    @Column(name = "storeAddress", nullable = false)
+    private String storeAddress;
+
+    @Column(name = "storeDetailAddress", nullable = false)
+    private String storeDetailAddress;
 
     @Column(name = "businessNumber", nullable = false)
-    private Integer businessNumber;
+    private String businessNumber;
 
 }

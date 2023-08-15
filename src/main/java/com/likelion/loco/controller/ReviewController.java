@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/reviews")
@@ -28,6 +30,15 @@ public class ReviewController {
         }
         return null;
     }
+    @PostMapping("/{reviewIdx}")
+    public BaseResponseStatus reviewCreate(@PathVariable("reviewIdx") Long reviewIdx, @RequestBody ReviewReq.reviewUpdateReq reviewUpdateReq){
+        try{
+            return reviewService.updateReview(reviewIdx,reviewUpdateReq);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @GetMapping("/stores/{storeidx}")
     public ReviewRes.ReviewListRes getAllReviewsByStoreIdx(@PathVariable("storeidx") Long storeIdx){
@@ -39,7 +50,7 @@ public class ReviewController {
         return null;
     }
     @GetMapping("/users/{useridx}")
-    public ReviewRes.ReviewListRes getAllMyReviews(@PathVariable("useridx") Long userIdx){
+    public List<ReviewRes.ReviewListRes> getAllMyReviews(@PathVariable("useridx") Long userIdx){
         try{
             return reviewService.getAllMyReview(userIdx);
         }catch (Exception e){

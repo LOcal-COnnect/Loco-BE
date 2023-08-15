@@ -2,6 +2,7 @@ package com.likelion.loco.dto;
 
 import com.likelion.loco.entities.Comment;
 import com.likelion.loco.entities.Promotion;
+import com.likelion.loco.entities.Seller;
 import com.likelion.loco.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,13 @@ public class CommentReq {
             return Comment.builder()
                     .commentContent(this.commentContent)
                     .user(user1)
+                    .promotion(promotion)
+                    .build();
+        }
+        public Comment toEntity(Seller seller, Promotion promotion){
+            return Comment.builder()
+                    .commentContent(this.commentContent)
+                    .seller(seller)
                     .promotion(promotion)
                     .build();
         }

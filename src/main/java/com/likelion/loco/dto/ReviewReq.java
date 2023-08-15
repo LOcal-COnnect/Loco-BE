@@ -25,4 +25,14 @@ public class ReviewReq {
                     .build();
         }
     }
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class reviewUpdateReq {
+        private String reviewContent;
+        private Integer reviewStar;
+
+    }
+
 }

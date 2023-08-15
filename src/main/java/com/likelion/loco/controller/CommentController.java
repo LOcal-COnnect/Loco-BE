@@ -2,12 +2,12 @@ package com.likelion.loco.controller;
 
 import com.likelion.loco.dto.CommentReq;
 import com.likelion.loco.dto.CommentRes;
-import com.likelion.loco.dto.ReviewReq;
-import com.likelion.loco.dto.ReviewRes;
 import com.likelion.loco.global.BaseResponseStatus;
+import com.likelion.loco.jwt.TokenProvider;
 import com.likelion.loco.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,15 +16,19 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
+    private final TokenProvider tokenProvider;
 
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, TokenProvider tokenProvider) {
         this.commentService = commentService;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/{promotionIdx}/users/{userIdx}")
-    public BaseResponseStatus commentCreate(@PathVariable("promotionIdx") Long promotionIdx, @PathVariable("userIdx") Long userIdx, @RequestBody CommentReq.commentCreateReq commentCreateReq){
+    public BaseResponseStatus commentCreate(@AuthenticationPrincipal String userId, @PathVariable("promotionIdx") Long promotionIdx, @PathVariable("userIdx") Long userIdx, @RequestBody CommentReq.commentCreateReq commentCreateReq){
         try{
-            return commentService.createComment(userIdx,promotionIdx,commentCreateReq);
+            System.out.println("userId : "+userId);
+
+            return commentService.createComment(tokenProvider.extractRoleFromBearerToken(userId),userIdx,promotionIdx,commentCreateReq);
         }catch (Exception e){
             e.printStackTrace();
         }

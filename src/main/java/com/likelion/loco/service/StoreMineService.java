@@ -86,9 +86,10 @@ public class StoreMineService {
         }
         return null;
     }
-    public void deleteStoreMine(Long storeMineIdx){
+    public void deleteStoreMine(Long userIdx, Long storeIdx){
         try{
-            storeMineRepository.deleteById(storeMineIdx);
+            StoreMine storeMine = storeMineRepository.findStoreMineByUserAndStore(userRepository.findByUserIdx(userIdx).get(),storeRepository.findById(storeIdx).get()).get();
+            storeMineRepository.deleteById(storeMine.getStoreMineIdx());
         }catch (Exception e){
             e.printStackTrace();
         }
