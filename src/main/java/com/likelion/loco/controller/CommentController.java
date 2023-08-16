@@ -34,6 +34,15 @@ public class CommentController {
         }
         return null;
     }
+    @PatchMapping("{commentIdx}")
+    public BaseResponseStatus commentUpdate(@AuthenticationPrincipal String userId, @PathVariable("commentIdx") Long commentIdx, @RequestBody CommentReq.commentUpdateReq commentUpdateReq){
+        try {
+            return commentService.updateComment(userId,commentIdx,commentUpdateReq);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @GetMapping("/promotion/{promotionIdx}")
     public CommentRes.CommentListRes getAllCommentsByPromotionIdx(@PathVariable("promotionIdx") Long promotionIdx){

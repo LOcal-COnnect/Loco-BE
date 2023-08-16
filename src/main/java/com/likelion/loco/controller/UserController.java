@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String userLogin(@RequestBody UserReq.LoginReq userLoginReq){
+    public UserRes.LoginRes userLogin(@RequestBody UserReq.LoginReq userLoginReq){
         try{;
             return userService.Login(userLoginReq);
         }catch (Exception e){
@@ -71,7 +71,7 @@ public class UserController {
 
     }
     @PatchMapping("{useridx}")
-    public BaseResponseStatus updateUserInfo(@PathVariable("useridx") Long userIdx, @RequestBody UserReq.UserUpdateReq userUpdateReq){
+    public UserRes.UpdateRes updateUserInfo(@PathVariable("useridx") Long userIdx, @RequestBody UserReq.UserUpdateReq userUpdateReq){
         try{
             return userService.userUpdate(userIdx, userUpdateReq);
 
@@ -82,7 +82,7 @@ public class UserController {
 
     }
     @PatchMapping("/sellers/{sellerIdx}")
-    public BaseResponseStatus updateSellerInfo(@PathVariable("sellerIdx") Long sellerIdx, @RequestBody SellerReq.SellerUpdateReq sellerUpdateReq){
+    public UserRes.UpdateRes updateSellerInfo(@PathVariable("sellerIdx") Long sellerIdx, @RequestBody SellerReq.SellerUpdateReq sellerUpdateReq){
         try{
             return userService.sellerUpdate(sellerIdx, sellerUpdateReq);
 
@@ -91,6 +91,16 @@ public class UserController {
         }
         return null;
 
+    }
+    @DeleteMapping("/{userIdx}")
+    public BaseResponseStatus deleteUser(@PathVariable("userIdx") Long userIdx){
+        try {
+            userService.userDelete(userIdx);
+            return BaseResponseStatus.SUCCESS;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

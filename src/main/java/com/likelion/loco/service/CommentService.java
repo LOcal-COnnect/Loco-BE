@@ -59,13 +59,28 @@ public class CommentService {
         return null; // 에러 핸들링 로직 추가
     }
 
-    public BaseResponseStatus updateComment(Long commentIdx, CommentReq.commentUpdateReq commentUpdateReq){
+    public BaseResponseStatus updateComment(String token,Long commentIdx, CommentReq.commentUpdateReq commentUpdateReq){
         try{
             Optional<Comment> comment = commentRepository.findByCommentIdx(commentIdx);
             if(comment.isPresent()){
-                Comment comment1 =  comment.get();
-                comment1.setCommentContent(commentUpdateReq.getCommentContent());
-                commentRepository.save(comment1);
+                Comment comment1 =  comment.get(); //role 확인까지 추가해야함
+                System.out.println("commenting user Id : "+tokenProvider.extractUserIdFromBearerToken(token)+" "+comment1.getUser().getUserId());
+                if(tokenProvider.extractRoleFromBearerToken(token).equals("BUYER")){ //BUYER인지 확인하고
+                    if(comment1.getUser().getUserId().equals(tokenProvider.extractUserIdFromBearerToken(token))){ //아이디 인증까지함
+                        comment1.setCommentContent(commentUpdateReq.getCommentContent());
+                        commentRepository.save(comment1);
+                        return BaseResponseStatus.SUCCESS;
+                    }
+                } else if (tokenProvider.extractRoleFromBearerToken(token).equals("SELLER")) { //SELLER인지 확인하고
+                    if(comment1.getSeller().getSellerId().equals(tokenProvider.extractUserIdFromBearerToken(token))){ //본인 맞는지 확인함
+                        comment1.setCommentContent(commentUpdateReq.getCommentContent());
+                        commentRepository.save(comment1);
+                        return BaseResponseStatus.SUCCESS;
+                    }
+                } else{
+                    return BaseResponseStatus.UPDATE_AUTHORIZED_ERROR;
+                }
+
             }else{
                 return BaseResponseStatus.MODIFY_FAIL_COMMENT;
             }

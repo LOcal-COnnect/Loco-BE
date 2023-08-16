@@ -30,7 +30,10 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     private boolean doesUserExist(String userId) {return userRepository.existsByUserId(userId);}
     private boolean doesSellerExist(String sellerId){return sellerRepository.existsBySellerId(sellerId);}
-
+    private boolean isDuplicateId(String userId, Long userIdx) {
+        return userRepository.existsByUserIdAndUserIdxNot(userId, userIdx) ||
+                sellerRepository.existsBySellerIdAndSellerIdxNot(userId, userIdx);
+    }
     public UserService(UserRepository userRepository, SellerRepository sellerRepository, TokenProvider tokenProvider, StoreRepository storeRepository, CategoryRepository categoryRepository) {
         this.userRepository = userRepository;
         this.sellerRepository = sellerRepository;
@@ -62,10 +65,10 @@ public class UserService {
                 Seller seller = new Seller();
                 seller.setSellerId(sellerCreateReq.getSellerId());
                 seller.setSellerName(sellerCreateReq.getSellerName());
-                seller.setSellerPassword(sellerCreateReq.getSellerPassword());
+                seller.setSellerPassword(bCryptPasswordEncoder.encode(sellerCreateReq.getSellerPassword()));
                 seller.setSellerEmail(sellerCreateReq.getSellerEmail());
                 seller.setSellerPhone(sellerCreateReq.getSellerPhone());
-
+                seller.setRoleType(RoleType.SELLER);
                 Seller savedSeller = sellerRepository.save(seller);
 
                 Store store = new Store();
@@ -92,7 +95,7 @@ public class UserService {
         return null;
     }
 
-    public String Login(UserReq.LoginReq userLoginReq){
+    public UserRes.LoginRes Login(UserReq.LoginReq userLoginReq){
         try{
             Optional<User> user = userRepository.findByUserId(userLoginReq.getUserId()); //암호화 해서 둘이 같은지 확인
             Optional<Seller> seller = sellerRepository.findBySellerId(userLoginReq.getUserId());
@@ -103,10 +106,10 @@ public class UserService {
                     String tokenDecode = tokenProvider.validateAndGetUserId(jwtToken);
                     System.out.println(tokenDecode);
                     System.out.println(tokenDecode.getClass());
-                    return jwtToken;
+                    return new UserRes.LoginRes(jwtToken,user1);
                 }
                 else { //비밀번호가 틀렸을시;
-                    return "FAILED_TO_LOGIN";
+                    return new UserRes.LoginRes("FAILED_TO_LOGIN");
                 }
             }
             else if (seller.isPresent()){ //만약 seller가 아니라 user라면
@@ -116,11 +119,11 @@ public class UserService {
                     String tokenDecode = tokenProvider.validateAndGetUserId(jwtToken);
                     System.out.println(tokenDecode);
                     System.out.println(tokenDecode.getClass());
-                    return jwtToken;
+                    return new UserRes.LoginRes(jwtToken,seller1);
                 }
             }
             else { //없는 유저일 시
-                return "FAILED_TO_LOGIN";
+                return new UserRes.LoginRes("FAILED_TO_LOGIN");
             }
         }
         catch (Exception e){
@@ -129,51 +132,67 @@ public class UserService {
         return null;
     }
 
-    public BaseResponseStatus userUpdate(Long userIdx, UserReq.UserUpdateReq userUpdateReq) {
+    public UserRes.UpdateRes userUpdate(Long userIdx, UserReq.UserUpdateReq userUpdateReq) {
         try{
             Optional<User> user = userRepository.findByUserIdx(userIdx);
-            System.out.println(user.get().getUserId());
-            System.out.println(userUpdateReq.getUserId());
-            System.out.println(userUpdateReq.getUserName());
-            if (user.isPresent()){
-                User user1 = user.get();
-                user1.setUserName(userUpdateReq.getUserName());
-                user1.setUserId(userUpdateReq.getUserId());
-                user1.setUserPassword(bCryptPasswordEncoder.encode(userUpdateReq.getUserPassword()));
-                user1.setUserEmail(userUpdateReq.getUserEmail());
-                user1.setUserAddress(userUpdateReq.getUserAddress());
-                user1.setUserDetailAddress(userUpdateReq.getUserDetailAddress());
-                user1.setUserPhone(userUpdateReq.getUserPhone());
+                if (user.isPresent()) {
+                    User user1 = user.get();
+                    boolean isDuplicate = isDuplicateId(userUpdateReq.getUserId(),userIdx);
+                    if(!isDuplicate) {
+                        user1.setUserName(userUpdateReq.getUserName());
+                        user1.setUserId(userUpdateReq.getUserId());
+                        user1.setUserPassword(bCryptPasswordEncoder.encode(userUpdateReq.getUserPassword()));
+                        user1.setUserEmail(userUpdateReq.getUserEmail());
+                        user1.setUserAddress(userUpdateReq.getUserAddress());
+                        user1.setUserDetailAddress(userUpdateReq.getUserDetailAddress());
+                        user1.setUserPhone(userUpdateReq.getUserPhone());
 
 
-                userRepository.save(user1);
+                        userRepository.save(user1);
 
-                return BaseResponseStatus.SUCCESS;
-
-
-            }
+                        return new UserRes.UpdateRes(tokenProvider.create(userUpdateReq.getUserId(), user1.getRoleType()),user1);
+                    }
+                    else{
+                        return new UserRes.UpdateRes(BaseResponseStatus.USERS_DUPLICATED.getMessage());
+                    }
+                }
+                else{
+                    //return new UserRes.UpdateRes("FAILED_TO_UPDATE");
+                    return new UserRes.UpdateRes(BaseResponseStatus.USERS_EMPTY_USER_ID.getMessage());
+                }
         }catch (Exception e){e.printStackTrace();}
         return null;
     }
-    public BaseResponseStatus sellerUpdate(Long sellerIdx, SellerReq.SellerUpdateReq sellerUpdateReq) {
-        try{
+
+    public UserRes.UpdateRes sellerUpdate(Long sellerIdx, SellerReq.SellerUpdateReq sellerUpdateReq) {
+        try {
             Optional<Seller> seller = sellerRepository.findById(sellerIdx);
-            if (seller.isPresent()){
+            if (seller.isPresent()) {
                 Seller user1 = seller.get();
-                user1.setSellerName(sellerUpdateReq.getSellerName());
-                user1.setSellerId(sellerUpdateReq.getSellerId());
-                user1.setSellerPassword(bCryptPasswordEncoder.encode(sellerUpdateReq.getSellerPassword()));
-                user1.setSellerEmail(sellerUpdateReq.getSellerEmail());
-                user1.setSellerPhone(sellerUpdateReq.getSellerPhone());
 
+                // Check for duplicate sellerId
+                boolean isDuplicate = isDuplicateId(sellerUpdateReq.getSellerId(),sellerIdx);
+                if (!isDuplicate) {
+                    user1.setSellerName(sellerUpdateReq.getSellerName());
+                    user1.setSellerId(sellerUpdateReq.getSellerId());
+                    user1.setSellerPassword(bCryptPasswordEncoder.encode(sellerUpdateReq.getSellerPassword()));
+                    user1.setSellerEmail(sellerUpdateReq.getSellerEmail());
+                    user1.setSellerPhone(sellerUpdateReq.getSellerPhone());
 
-                sellerRepository.save(user1);
+                    sellerRepository.save(user1);
 
-                return BaseResponseStatus.SUCCESS;
+                    return new UserRes.UpdateRes(tokenProvider.create(sellerUpdateReq.getSellerId(), user1.getRoleType()),user1);
 
-
+                } else {
+                    return new UserRes.UpdateRes(BaseResponseStatus.USERS_DUPLICATED.getMessage());
+                }
             }
-        }catch (Exception e){e.printStackTrace();}
+            else{
+                return new UserRes.UpdateRes(BaseResponseStatus.USERS_EMPTY_USER_ID.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

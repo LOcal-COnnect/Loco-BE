@@ -6,15 +6,13 @@ import com.likelion.loco.entities.Review;
 import com.likelion.loco.entities.Store;
 import com.likelion.loco.entities.User;
 import com.likelion.loco.global.BaseResponseStatus;
+import com.likelion.loco.jwt.TokenProvider;
 import com.likelion.loco.repository.ReviewRepository;
 import com.likelion.loco.repository.StoreRepository;
 import com.likelion.loco.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -22,11 +20,13 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
+    private final TokenProvider tokenProvider;
 
-    public ReviewService(ReviewRepository reviewRepository, UserRepository userRepository, StoreRepository storeRepository) {
+    public ReviewService(ReviewRepository reviewRepository, UserRepository userRepository, StoreRepository storeRepository, TokenProvider tokenProvider) {
         this.reviewRepository = reviewRepository;
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     public BaseResponseStatus createReview(Long userIdx, Long storeIdx, ReviewReq.reviewCreateReq reviewCreateReq){
@@ -40,27 +40,43 @@ public class ReviewService {
         return null;
     }
 
-    public BaseResponseStatus updateReview(Long reviewIdx, ReviewReq.reviewUpdateReq reviewUpdateReq){
+    public BaseResponseStatus updateReview(String token,Long reviewIdx, ReviewReq.reviewUpdateReq reviewUpdateReq){
         try {
             Review review = reviewRepository.findById(reviewIdx).get();
-            review.setReviewContent(reviewUpdateReq.getReviewContent());
-            review.setReviewStar(reviewUpdateReq.getReviewStar());
-            reviewRepository.save(review);
+            System.out.println("reviewing user Id : "+tokenProvider.extractUserIdFromBearerToken(token)+" "+review.getUser().getUserId());
+
+            if (review.getUser().getUserId().equals(tokenProvider.extractUserIdFromBearerToken(token))){ //본인인증 로직 혹시 몰라서 넣어둠
+                review.setReviewContent(reviewUpdateReq.getReviewContent());
+                review.setReviewStar(reviewUpdateReq.getReviewStar());
+                reviewRepository.save(review);
+                return BaseResponseStatus.SUCCESS;
+            }
+            else {
+                return BaseResponseStatus.UPDATE_AUTHORIZED_ERROR;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
         return null;
     }
-    public ReviewRes.ReviewListRes getAllReviewByStoreIdx(Long storeIdx){
-        try{
-            List<Review> review = reviewRepository.findReviewsByStore(storeRepository.findById(storeIdx).get());
-            return new ReviewRes.ReviewListRes(review.get(0).getStore(),review.get(0).getUser(),review);
-        }catch (Exception e){
+    public ReviewRes.ReviewListRes getAllReviewByStoreIdx(Long storeIdx) {
+        try {
+            Optional<Store> storeOptional = storeRepository.findById(storeIdx);
+            if (storeOptional.isPresent()) {
+                Store store = storeOptional.get();
+                List<Review> reviewList = reviewRepository.findReviewsByStore(store);
+
+                if (!reviewList.isEmpty()) {
+                    return new ReviewRes.ReviewListRes(store, reviewList.get(0).getUser(), reviewList);
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    public List<ReviewRes.ReviewListRes> getAllMyReview(Long userIdx) {
+
+    public List<ReviewRes.MyReviewListRes> getAllMyReview(Long userIdx) {
         try {
             List<Review> reviewList = reviewRepository.findReviewsByUser(userRepository.findByUserIdx(userIdx).get());
             Map<Long, List<Review>> reviewMapByStoreIdx = new HashMap<>();
@@ -71,7 +87,7 @@ public class ReviewService {
                 reviewMapByStoreIdx.computeIfAbsent(storeIdx, k -> new ArrayList<>()).add(review);
             }
 
-            List<ReviewRes.ReviewListRes> reviewListRes = new ArrayList<>();
+            List<ReviewRes.MyReviewListRes> reviewListRes = new ArrayList<>();
 
             // 리뷰 맵을 기반으로 ReviewListRes 객체 생성
             for (Map.Entry<Long, List<Review>> entry : reviewMapByStoreIdx.entrySet()) {
@@ -80,7 +96,7 @@ public class ReviewService {
                 User user = userRepository.findByUserIdx(userIdx).orElse(null);
 
                 if (store != null && user != null) {
-                    ReviewRes.ReviewListRes storeReviewList = new ReviewRes.ReviewListRes(
+                    ReviewRes.MyReviewListRes storeReviewList = new ReviewRes.MyReviewListRes(
                             store,
                             user,
                             entry.getValue()

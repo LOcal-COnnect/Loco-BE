@@ -7,6 +7,7 @@ import com.likelion.loco.service.ReviewService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,10 +31,10 @@ public class ReviewController {
         }
         return null;
     }
-    @PostMapping("/{reviewIdx}")
-    public BaseResponseStatus reviewUpdate(@PathVariable("reviewIdx") Long reviewIdx, @RequestBody ReviewReq.reviewUpdateReq reviewUpdateReq){
+    @PatchMapping("/{reviewIdx}")
+    public BaseResponseStatus reviewUpdate(@AuthenticationPrincipal String userId, @PathVariable("reviewIdx") Long reviewIdx, @RequestBody ReviewReq.reviewUpdateReq reviewUpdateReq){
         try{
-            return reviewService.updateReview(reviewIdx,reviewUpdateReq);
+            return reviewService.updateReview(userId,reviewIdx,reviewUpdateReq);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -50,7 +51,7 @@ public class ReviewController {
         return null;
     }
     @GetMapping("/users/{useridx}")
-    public List<ReviewRes.ReviewListRes> getAllMyReviews(@PathVariable("useridx") Long userIdx){
+    public List<ReviewRes.MyReviewListRes> getAllMyReviews(@PathVariable("useridx") Long userIdx){
         try{
             return reviewService.getAllMyReview(userIdx);
         }catch (Exception e){
