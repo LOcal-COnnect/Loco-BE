@@ -43,8 +43,8 @@ public class ReviewService {
     public BaseResponseStatus updateReview(Long reviewIdx, ReviewReq.reviewUpdateReq reviewUpdateReq){
         try {
             Review review = reviewRepository.findById(reviewIdx).get();
-            review.setReviewContent(review.getReviewContent());
-            review.setReviewStar(review.getReviewStar());
+            review.setReviewContent(reviewUpdateReq.getReviewContent());
+            review.setReviewStar(reviewUpdateReq.getReviewStar());
             reviewRepository.save(review);
         }catch (Exception e){
             e.printStackTrace();

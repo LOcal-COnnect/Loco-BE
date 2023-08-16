@@ -9,6 +9,7 @@ import com.likelion.loco.entities.User;
 import com.likelion.loco.global.BaseResponseStatus;
 import com.likelion.loco.global.enums.RoleType;
 import com.likelion.loco.jwt.TokenProvider;
+import com.likelion.loco.repository.CategoryRepository;
 import com.likelion.loco.repository.SellerRepository;
 import com.likelion.loco.repository.StoreRepository;
 import com.likelion.loco.repository.UserRepository;
@@ -24,16 +25,18 @@ public class UserService {
     private final SellerRepository sellerRepository;
     private final TokenProvider tokenProvider;
     private final StoreRepository storeRepository;
+    private final CategoryRepository categoryRepository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     private boolean doesUserExist(String userId) {return userRepository.existsByUserId(userId);}
     private boolean doesSellerExist(String sellerId){return sellerRepository.existsBySellerId(sellerId);}
 
-    public UserService(UserRepository userRepository, SellerRepository sellerRepository, TokenProvider tokenProvider, StoreRepository storeRepository) {
+    public UserService(UserRepository userRepository, SellerRepository sellerRepository, TokenProvider tokenProvider, StoreRepository storeRepository, CategoryRepository categoryRepository) {
         this.userRepository = userRepository;
         this.sellerRepository = sellerRepository;
         this.tokenProvider = tokenProvider;
         this.storeRepository = storeRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public BaseResponseStatus userRegister(UserReq.UserCreateReq userCreateReq){
@@ -72,6 +75,8 @@ public class UserService {
                 store.setStoreName(sellerCreateReq.getStoreName());
                 store.setStorePhone(sellerCreateReq.getStorePhone());
                 store.setBusinessNumber(sellerCreateReq.getBusinessNumber());
+                store.setCategory(categoryRepository.findById(1L).get()); //기본값으로 설정
+                store.setStoreDesc("가게설명입니다.");
 
                 storeRepository.save(store);
                 return BaseResponseStatus.SUCCESS;

@@ -31,7 +31,7 @@ public class ReviewController {
         return null;
     }
     @PostMapping("/{reviewIdx}")
-    public BaseResponseStatus reviewCreate(@PathVariable("reviewIdx") Long reviewIdx, @RequestBody ReviewReq.reviewUpdateReq reviewUpdateReq){
+    public BaseResponseStatus reviewUpdate(@PathVariable("reviewIdx") Long reviewIdx, @RequestBody ReviewReq.reviewUpdateReq reviewUpdateReq){
         try{
             return reviewService.updateReview(reviewIdx,reviewUpdateReq);
         }catch (Exception e){

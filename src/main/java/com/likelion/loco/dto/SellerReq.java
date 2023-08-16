@@ -1,5 +1,6 @@
 package com.likelion.loco.dto;
 
+import com.likelion.loco.entities.Category;
 import com.likelion.loco.entities.Seller;
 import com.likelion.loco.global.enums.RoleType;
 import lombok.AllArgsConstructor;

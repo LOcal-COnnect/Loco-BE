@@ -21,23 +21,23 @@ public class Store extends BaseEntity {
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "SellerIdx")
+    @JoinColumn(name = "SellerIdx",nullable = true)
     private Seller seller;
 
     @ManyToOne
-    @JoinColumn(name = "CategoryIdx")
+    @JoinColumn(name = "CategoryIdx", nullable = true)
     private Category category;
 
     @Column(name = "storeName", nullable = false)
     private String storeName;
 
-    @Column(name = "storePhone", nullable = false)
+    @Column(name = "storePhone", nullable = true)
     private String storePhone;
 
-    @Column(name = "storeTel", nullable = false)
+    @Column(name = "storeTel", nullable = true)
     private String storeTel;
 
-    @Column(name = "storeDesc", nullable = false)
+    @Column(name = "storeDesc", nullable = true)
     private String storeDesc;
 
     @Column(name = "storeAddress", nullable = false)
