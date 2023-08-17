@@ -12,8 +12,10 @@ public class SellerRes {
     @Setter
     public static class GetSellerInfo{
         private Seller seller;
-        public   GetSellerInfo(Seller seller){
+        private Boolean isCheckStore;
+        public   GetSellerInfo(Seller seller, Boolean aBoolean){
             this.seller = seller;
+            this.isCheckStore = aBoolean;
         }
 
     }

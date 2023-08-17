@@ -18,6 +18,7 @@ public class Promotion extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long promotionIdx;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "sellerIdx")
     private Seller seller;

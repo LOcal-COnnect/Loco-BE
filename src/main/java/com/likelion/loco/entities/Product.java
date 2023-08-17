@@ -1,5 +1,6 @@
 package com.likelion.loco.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class Product extends BaseEntity {
     @Column(name = "productIdx")
     private Long productIdx;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "storeIdx")
     private Store store;

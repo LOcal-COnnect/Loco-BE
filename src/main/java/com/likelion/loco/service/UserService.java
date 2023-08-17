@@ -181,7 +181,9 @@ public class UserService {
     }
 
     public SellerRes.GetSellerInfo getSellerInfo(Long sellerIdx){ //마이페이지 때 쓸 예정
-        return new SellerRes.GetSellerInfo(sellerRepository.findById(sellerIdx).get());
+        Seller seller = sellerRepository.findById(sellerIdx).get();
+        Boolean bool = storeRepository.existsBySeller(seller);
+        return new SellerRes.GetSellerInfo(seller,bool);
     }
     public UserRes.UserGetRes getUserInfo(Long userIdx){ //마이페이지 때 쓸 예정
         return new UserRes.UserGetRes(userRepository.findById(userIdx).get());

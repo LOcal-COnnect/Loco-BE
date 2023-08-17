@@ -5,6 +5,8 @@ import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,11 +23,12 @@ public class Store extends BaseEntity {
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "SellerIdx",nullable = false)
+    @JoinColumn(name = "sellerIdx")
     private Seller seller;
 
-    @Column(name = "category", nullable = false)
-    private String category;
+    @JsonIgnore
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    private List<Product> productList = new ArrayList<>(); // 빈 리스트로 초기화
 
     @Column(name = "storeName", nullable = false)
     private String storeName;
@@ -39,13 +42,13 @@ public class Store extends BaseEntity {
     @Column(name = "storeDesc", nullable = false)
     private String storeDesc;
 
-    @Column(name = "storeAddress", nullable = false)
-    private String storeAddress;
+    @Column(name = "storeLocation", nullable = false)
+    private String storeLocation;
 
-    @Column(name = "storeDetailAddress", nullable = false)
-    private String storeDetailAddress;
+    @Column(name = "category", nullable = false)
+    private String category;
 
-    @Column(name = "businessNumber", nullable = false)
+    @Column(name = "businessNumber", nullable = true)
     private String businessNumber;
 
 }

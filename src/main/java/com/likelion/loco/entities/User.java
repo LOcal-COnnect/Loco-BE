@@ -1,10 +1,13 @@
 package com.likelion.loco.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.likelion.loco.global.BaseEntity;
 import com.likelion.loco.global.enums.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,6 +41,10 @@ public class User extends BaseEntity {
 
     @Column(name = "userDetailAddress",nullable = false)
     private String userDetailAddress;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Review> reviewList = new ArrayList<>(); // 빈 리스트로 초기화
 
 
     @Enumerated(EnumType.STRING)
