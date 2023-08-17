@@ -98,8 +98,13 @@ public class CommentService {
         List<Comment> commentList = commentRepository.findCommentsByPromotion(promotionRepository.findById(promotionIdx).get());
         return commentList.stream().map(CommentRes.CommentListRes::new).collect(Collectors.toList());
     }
-    public void deleteByCommentIdx(Long commentIdx){
-        commentRepository.deleteById(commentIdx);
+    public boolean deleteByCommentIdx(Long commentIdx) {
+        try {
+            commentRepository.deleteById(commentIdx);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-
 }

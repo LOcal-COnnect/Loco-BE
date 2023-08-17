@@ -4,6 +4,8 @@ import com.likelion.loco.entities.Store;
 import com.likelion.loco.global.BaseResponseStatus;
 import com.likelion.loco.service.StoreMineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,53 +22,78 @@ public class StoreMineController {
     }
 
     @PostMapping("/{userIdx}/store/{storeIdx}")
-    public BaseResponseStatus createStoreMine (@PathVariable("userIdx") Long userIdx, @PathVariable("storeIdx") Long storeIdx){
-        try{
-            return storeMineService.createStoreMine(userIdx,storeIdx);
-        }catch (Exception e){
+    public ResponseEntity<BaseResponseStatus> createStoreMine(@PathVariable("userIdx") Long userIdx, @PathVariable("storeIdx") Long storeIdx) {
+        try {
+            BaseResponseStatus responseStatus = storeMineService.createStoreMine(userIdx, storeIdx);
+            if (responseStatus != null && responseStatus.equals(BaseResponseStatus.SUCCESS)) {
+                return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
-    
     //찜 갯수 조회
     @GetMapping("/store/{storeIdx}")
-    public Integer getCountAllStoreMine(@PathVariable("storeIdx") Long storeIdx){
-        try{
-            return storeMineService.getCountStoreMine(storeIdx);
-        }catch (Exception e){
+    public ResponseEntity<Integer> getCountAllStoreMine(@PathVariable("storeIdx") Long storeIdx) {
+        try {
+            Integer count = storeMineService.getCountStoreMine(storeIdx);
+            if (count != null) {
+                return new ResponseEntity<>(count, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
     //찜했는지 여부 확인
     @GetMapping("/{useridx}/store/{storeIdx}")
-    public Boolean getMyStoreMineIsChecked(@PathVariable("useridx") Long userIdx, @PathVariable("storeIdx") Long storeIdx){
-        try{
-            return storeMineService.storeMineIsChecked(userIdx, storeIdx);
-        }catch (Exception e){
+    public ResponseEntity<Boolean> getMyStoreMineIsChecked(@PathVariable("useridx") Long userIdx, @PathVariable("storeIdx") Long storeIdx) {
+        try {
+            Boolean isChecked = storeMineService.storeMineIsChecked(userIdx, storeIdx);
+            if (isChecked != null) {
+                return new ResponseEntity<>(isChecked, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
     //내 찜한 상점 목록 가져오기
+
     @GetMapping("/users/{userIdx}")
-    public List<Store> getAllMyStoreMineList(@PathVariable("userIdx") Long userIdx){
-        try{
-            return storeMineService.getMyStoreMineList(userIdx);
-        }catch (Exception e){
+    public ResponseEntity<List<Store>> getAllMyStoreMineList(@PathVariable("userIdx") Long userIdx) {
+        try {
+            List<Store> storeList = storeMineService.getMyStoreMineList(userIdx);
+            if (storeList != null && !storeList.isEmpty()) {
+                return new ResponseEntity<>(storeList, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
     @DeleteMapping("/{userIdx}/store/{storeIdx}")
-    public void deleteMyMineStore(@PathVariable("userIdx") Long userIdx, @PathVariable("storeIdx") Long storeIdx){
-        try{
-            storeMineService.deleteStoreMine(userIdx,storeIdx);
-        }catch (Exception e){
+    public ResponseEntity<Void> deleteMyMineStore(@PathVariable("userIdx") Long userIdx, @PathVariable("storeIdx") Long storeIdx) {
+        try {
+            if(storeMineService.deleteStoreMine(userIdx, storeIdx)){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
 
 }

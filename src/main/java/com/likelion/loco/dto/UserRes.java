@@ -19,22 +19,27 @@ public class UserRes {
     public static class LoginRes{
         private User user;
         private String jwtToken;
-        private String status;
+        private String message;
         private Seller seller;
         private RoleType roleType;
+        private Boolean success;
 
-        public LoginRes(String jwtToken, User user1) {
+        public LoginRes(String jwtToken, User user1,Boolean success,String message) {
             this.jwtToken = jwtToken;
             this.user = user1;
             this.roleType = user1.getRoleType();
+            this.success = success;
+            this.message = message;
         }
-        public LoginRes(String jwtToken, Seller seller) {
+        public LoginRes(String jwtToken, Seller seller,Boolean success,String message) {
             this.jwtToken = jwtToken;
             this.seller = seller;
             this.roleType = seller.getRoleType();
+            this.success = success;
+            this.message = message;
         }
-        public LoginRes(String status){
-            this.status = status;
+        public LoginRes(String message,Boolean success){
+            this.message = message; this.success = success;
         }
     }
     @Getter

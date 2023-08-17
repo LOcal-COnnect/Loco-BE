@@ -87,10 +87,10 @@ public class UserService {
                     String tokenDecode = tokenProvider.validateAndGetUserId(jwtToken);
                     System.out.println(tokenDecode);
                     System.out.println(tokenDecode.getClass());
-                    return new UserRes.LoginRes(jwtToken,user1);
+                    return new UserRes.LoginRes(jwtToken,user1,true,BaseResponseStatus.SUCCESS.getMessage());
                 }
                 else { //비밀번호가 틀렸을시;
-                    return new UserRes.LoginRes("FAILED_TO_LOGIN");
+                    return new UserRes.LoginRes(BaseResponseStatus.FAILED_TO_LOGIN.getMessage(),false);
                 }
             }
             else if (seller.isPresent()){ //만약 seller가 아니라 user라면
@@ -100,11 +100,14 @@ public class UserService {
                     String tokenDecode = tokenProvider.validateAndGetUserId(jwtToken);
                     System.out.println(tokenDecode);
                     System.out.println(tokenDecode.getClass());
-                    return new UserRes.LoginRes(jwtToken,seller1);
+                    return new UserRes.LoginRes(jwtToken,seller1,true,BaseResponseStatus.SUCCESS.getMessage());
+                }
+                else { //비밀번호가 틀렸을시;
+                    return new UserRes.LoginRes(BaseResponseStatus.FAILED_TO_LOGIN.getMessage(),false);
                 }
             }
             else { //없는 유저일 시
-                return new UserRes.LoginRes("FAILED_TO_LOGIN");
+                return new UserRes.LoginRes(BaseResponseStatus.FAILED_TO_LOGIN.getMessage(),false);
             }
         }
         catch (Exception e){
@@ -134,12 +137,12 @@ public class UserService {
                         return new UserRes.UpdateRes(tokenProvider.create(userUpdateReq.getUserId(), user1.getRoleType()),user1);
                     }
                     else{
-                        return new UserRes.UpdateRes(BaseResponseStatus.USERS_DUPLICATED.getMessage());
+                        return null;
                     }
                 }
                 else{
                     //return new UserRes.UpdateRes("FAILED_TO_UPDATE");
-                    return new UserRes.UpdateRes(BaseResponseStatus.USERS_EMPTY_USER_ID.getMessage());
+                    return null;
                 }
         }catch (Exception e){e.printStackTrace();}
         return null;
@@ -165,11 +168,11 @@ public class UserService {
                     return new UserRes.UpdateRes(tokenProvider.create(sellerUpdateReq.getSellerId(), user1.getRoleType()),user1);
 
                 } else {
-                    return new UserRes.UpdateRes(BaseResponseStatus.USERS_DUPLICATED.getMessage());
+                    return  null;
                 }
             }
             else{
-                return new UserRes.UpdateRes(BaseResponseStatus.USERS_EMPTY_USER_ID.getMessage());
+                return  null;
             }
         } catch (Exception e) {
             e.printStackTrace();

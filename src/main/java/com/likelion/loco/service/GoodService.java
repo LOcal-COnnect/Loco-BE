@@ -2,6 +2,8 @@ package com.likelion.loco.service;
 
 import com.likelion.loco.dto.GoodRes;
 import com.likelion.loco.entities.Good;
+import com.likelion.loco.entities.Promotion;
+import com.likelion.loco.entities.User;
 import com.likelion.loco.global.BaseResponseStatus;
 import com.likelion.loco.repository.GoodRepository;
 import com.likelion.loco.repository.PromotionRepository;
@@ -61,11 +63,20 @@ public class GoodService {
     }
 
 
-    public void deleteGood(Long userIdx, Long promotionIdx){
+    public Boolean deleteGood(Long userIdx, Long promotionIdx){
         try{
-            goodRepository.deleteAllByUserAndPromotion(userRepository.findByUserIdx(userIdx).get(),promotionRepository.findPromotionByPromotionIdx(promotionIdx).get());
+            Optional<User> user = userRepository.findByUserIdx(userIdx);
+            Optional<Promotion> promotion = promotionRepository.findPromotionByPromotionIdx(promotionIdx);
+            if(user.isPresent() && promotion.isPresent()){
+                goodRepository.deleteAllByUserAndPromotion(user.get(),promotion.get());
+                return true;
+            }
+            else{
+                return false;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
+        return null;
     }
 }

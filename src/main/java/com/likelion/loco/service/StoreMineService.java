@@ -3,6 +3,7 @@ package com.likelion.loco.service;
 import com.likelion.loco.entities.Good;
 import com.likelion.loco.entities.Store;
 import com.likelion.loco.entities.StoreMine;
+import com.likelion.loco.entities.User;
 import com.likelion.loco.global.BaseResponseStatus;
 import com.likelion.loco.repository.StoreMineRepository;
 import com.likelion.loco.repository.StoreRepository;
@@ -86,12 +87,22 @@ public class StoreMineService {
         }
         return null;
     }
-    public void deleteStoreMine(Long userIdx, Long storeIdx){
-        try{
-            StoreMine storeMine = storeMineRepository.findStoreMineByUserAndStore(userRepository.findByUserIdx(userIdx).get(),storeRepository.findById(storeIdx).get()).get();
-            storeMineRepository.deleteById(storeMine.getStoreMineIdx());
-        }catch (Exception e){
+    public Boolean deleteStoreMine(Long userIdx, Long storeIdx) {
+        try {
+            Optional<User> user = userRepository.findByUserIdx(userIdx);
+            Optional<Store> store = storeRepository.findById(storeIdx);
+
+            if (user.isPresent() && store.isPresent()) {
+                Optional<StoreMine> storeMine = storeMineRepository.findStoreMineByUserAndStore(user.get(), store.get());
+                if (storeMine.isPresent()) {
+                    storeMineRepository.deleteById(storeMine.get().getStoreMineIdx());
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 

@@ -23,51 +23,74 @@ public class ReviewController {
     }
 
     @PostMapping("/{storeidx}/users/{useridx}")
-    public BaseResponseStatus reviewCreate(@PathVariable("storeidx") Long storeIdx, @PathVariable("useridx") Long userIdx, @RequestBody ReviewReq.reviewCreateReq reviewCreateReq){
-        try{
-            return reviewService.createReview(userIdx,storeIdx,reviewCreateReq);
-        }catch (Exception e){
+    public ResponseEntity<BaseResponseStatus> reviewCreate(@PathVariable("storeidx") Long storeIdx, @PathVariable("useridx") Long userIdx, @RequestBody ReviewReq.reviewCreateReq reviewCreateReq) {
+        try {
+            BaseResponseStatus responseStatus = reviewService.createReview(userIdx, storeIdx, reviewCreateReq);
+            if (responseStatus.equals(BaseResponseStatus.SUCCESS)) {
+                return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
+
     @PatchMapping("/{reviewIdx}")
-    public BaseResponseStatus reviewUpdate(@AuthenticationPrincipal String userId, @PathVariable("reviewIdx") Long reviewIdx, @RequestBody ReviewReq.reviewUpdateReq reviewUpdateReq){
-        try{
-            return reviewService.updateReview(userId,reviewIdx,reviewUpdateReq);
-        }catch (Exception e){
+    public ResponseEntity<BaseResponseStatus> reviewUpdate(@AuthenticationPrincipal String userId, @PathVariable("reviewIdx") Long reviewIdx, @RequestBody ReviewReq.reviewUpdateReq reviewUpdateReq) {
+        try {
+            BaseResponseStatus responseStatus = reviewService.updateReview(userId, reviewIdx, reviewUpdateReq);
+            if (responseStatus.equals(BaseResponseStatus.SUCCESS)) {
+                return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 
     @GetMapping("/stores/{storeidx}")
-    public List<ReviewRes.ReviewListRes> getAllReviewsByStoreIdx(@PathVariable("storeidx") Long storeIdx){
-        try{
-            return reviewService.getAllReviewByStoreIdx(storeIdx);
-        }catch (Exception e){
+    public ResponseEntity<List<ReviewRes.ReviewListRes>> getAllReviewsByStoreIdx(@PathVariable("storeidx") Long storeIdx) {
+        try {
+            List<ReviewRes.ReviewListRes> reviews = reviewService.getAllReviewByStoreIdx(storeIdx);
+            if (reviews != null) {//DB데이터가 존재하는 경우
+                return new ResponseEntity<>(reviews, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
-    }
-    @GetMapping("/users/{useridx}")
-    public List<ReviewRes.ReviewListRes> getAllMyReviews(@PathVariable("useridx") Long userIdx){
-        try{
-            return reviewService.getAllMyReview(userIdx);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-    @DeleteMapping("/{reviewidx}")
-    public ResponseEntity<HttpStatus> deleteMyReview(@PathVariable("reviewidx") Long reviewIdx){
-        try{
-            reviewService.deleteMyReview(reviewIdx);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
+    @GetMapping("/users/{useridx}")
+    public ResponseEntity<List<ReviewRes.ReviewListRes>> getAllMyReviews(@PathVariable("useridx") Long userIdx) {
+        try {
+            List<ReviewRes.ReviewListRes> reviews = reviewService.getAllMyReview(userIdx);
+            if (reviews != null) {
+                return new ResponseEntity<>(reviews, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{reviewidx}")
+    public ResponseEntity<HttpStatus> deleteMyReview(@PathVariable("reviewidx") Long reviewIdx) {
+        try {
+            reviewService.deleteMyReview(reviewIdx);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

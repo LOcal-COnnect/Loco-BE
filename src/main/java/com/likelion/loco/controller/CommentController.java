@@ -26,44 +26,64 @@ public class CommentController {
     }
 
     @PostMapping("/{promotionIdx}/users/{userIdx}")
-    public BaseResponseStatus commentCreate(@AuthenticationPrincipal String userId, @PathVariable("promotionIdx") Long promotionIdx, @PathVariable("userIdx") Long userIdx, @RequestBody CommentReq.commentCreateReq commentCreateReq){
-        try{
-            System.out.println("userId : "+userId);
-
-            return commentService.createComment(tokenProvider.extractRoleFromBearerToken(userId),userIdx,promotionIdx,commentCreateReq);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-    @PatchMapping("{commentIdx}")
-    public BaseResponseStatus commentUpdate(@AuthenticationPrincipal String userId, @PathVariable("commentIdx") Long commentIdx, @RequestBody CommentReq.commentUpdateReq commentUpdateReq){
+    public ResponseEntity<BaseResponseStatus> commentCreate(@AuthenticationPrincipal String userId, @PathVariable("promotionIdx") Long promotionIdx, @PathVariable("userIdx") Long userIdx, @RequestBody CommentReq.commentCreateReq commentCreateReq) {
         try {
-            return commentService.updateComment(userId,commentIdx,commentUpdateReq);
-        }catch (Exception e){
+            System.out.println("userId : " + userId);
+
+            BaseResponseStatus responseStatus = commentService.createComment(tokenProvider.extractRoleFromBearerToken(userId), userIdx, promotionIdx, commentCreateReq);
+            if (responseStatus != null && responseStatus.equals(BaseResponseStatus.SUCCESS)) {
+                return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
+    }
+
+    @PatchMapping("{commentIdx}")
+    public ResponseEntity<BaseResponseStatus> commentUpdate(@AuthenticationPrincipal String userId, @PathVariable("commentIdx") Long commentIdx, @RequestBody CommentReq.commentUpdateReq commentUpdateReq) {
+        try {
+            BaseResponseStatus responseStatus = commentService.updateComment(userId, commentIdx, commentUpdateReq);
+            if (responseStatus != null && responseStatus.equals(BaseResponseStatus.SUCCESS)) {
+                return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/promotion/{promotionIdx}")
-    public List<CommentRes.CommentListRes> getAllCommentsByPromotionIdx(@PathVariable("promotionIdx") Long promotionIdx){
-        try{
-            return commentService.getCommentByPromotionIdx(promotionIdx);
-        }catch (Exception e){
+    public ResponseEntity<List<CommentRes.CommentListRes>> getAllCommentsByPromotionIdx(@PathVariable("promotionIdx") Long promotionIdx) {
+        try {
+            List<CommentRes.CommentListRes> comments = commentService.getCommentByPromotionIdx(promotionIdx);
+            if (comments != null && !comments.isEmpty()) {
+                return new ResponseEntity<>(comments, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 
     @DeleteMapping("/{commentIdx}")
-    public ResponseEntity<HttpStatus> deleteMyComment(@PathVariable("commentIdx") Long commentIdx){
-        try{
-            commentService.deleteByCommentIdx(commentIdx);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e){
+    public ResponseEntity<HttpStatus> deleteMyComment(@PathVariable("commentIdx") Long commentIdx) {
+        try {
+            if (commentService.deleteByCommentIdx(commentIdx)){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 }
