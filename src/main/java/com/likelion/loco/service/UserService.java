@@ -209,4 +209,9 @@ public class UserService {
             userRepository.deleteById(userIdx);
         }catch (Exception e) {e.printStackTrace();}
     }
+    public void sellerDelete(Long sellerIdx){ //회원탈퇴
+        try {
+            sellerRepository.deleteById(sellerIdx);
+        }catch (Exception e) {e.printStackTrace();}
+    }
 }

@@ -120,6 +120,16 @@ public class UserController {
         }
         return null;
     }
+    @DeleteMapping("/sellers/{sellerIdx}")
+    public BaseResponseStatus deleteSeller(@PathVariable("sellerIdx") Long sellerIdx){
+        try {
+            userService.sellerDelete(sellerIdx);
+            return BaseResponseStatus.SUCCESS;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
