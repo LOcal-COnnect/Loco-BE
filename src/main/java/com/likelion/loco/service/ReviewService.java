@@ -59,16 +59,19 @@ public class ReviewService {
         }
         return null;
     }
-    public ReviewRes.ReviewListRes getAllReviewByStoreIdx(Long storeIdx) {
+    public List<ReviewRes.ReviewListRes> getAllReviewByStoreIdx(Long storeIdx) {
         try {
             Optional<Store> storeOptional = storeRepository.findById(storeIdx);
             if (storeOptional.isPresent()) {
                 Store store = storeOptional.get();
+                List<ReviewRes.ReviewListRes> reviewListRes = new ArrayList<>();
                 List<Review> reviewList = reviewRepository.findReviewsByStore(store);
 
-                if (!reviewList.isEmpty()) {
-                    return new ReviewRes.ReviewListRes(store, reviewList.get(0).getUser(), reviewList);
+                for(Review review : reviewList){
+                    reviewListRes.add(new ReviewRes.ReviewListRes(store,review.getUser(),review));
                 }
+                return reviewListRes;
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,36 +79,19 @@ public class ReviewService {
         return null;
     }
 
-    public List<ReviewRes.MyReviewListRes> getAllMyReview(Long userIdx) {
+    public List<ReviewRes.ReviewListRes> getAllMyReview(Long userIdx) {
         try {
             List<Review> reviewList = reviewRepository.findReviewsByUser(userRepository.findByUserIdx(userIdx).get());
-            Map<Long, List<Review>> reviewMapByStoreIdx = new HashMap<>();
 
             // 리뷰를 storeIdx 별로 맵에 그룹화
-            for (Review review : reviewList) {
-                Long storeIdx = review.getStore().getStoreIdx();
-                reviewMapByStoreIdx.computeIfAbsent(storeIdx, k -> new ArrayList<>()).add(review);
+            List<ReviewRes.ReviewListRes> reviewListRes = new ArrayList<>();
+            for(Review review : reviewList){
+                reviewListRes.add(new ReviewRes.ReviewListRes(review.getStore(),review.getUser(),review));
             }
-
-            List<ReviewRes.MyReviewListRes> reviewListRes = new ArrayList<>();
+            return reviewListRes;
 
             // 리뷰 맵을 기반으로 ReviewListRes 객체 생성
-            for (Map.Entry<Long, List<Review>> entry : reviewMapByStoreIdx.entrySet()) {
-                Long storeIdx = entry.getKey();
-                Store store = storeRepository.findById(storeIdx).orElse(null);
-                User user = userRepository.findByUserIdx(userIdx).orElse(null);
 
-                if (store != null && user != null) {
-                    ReviewRes.MyReviewListRes storeReviewList = new ReviewRes.MyReviewListRes(
-                            store,
-                            user,
-                            entry.getValue()
-                    );
-                    reviewListRes.add(storeReviewList);
-                }
-            }
-
-            return reviewListRes;
         } catch (Exception e) {
             e.printStackTrace();
         }

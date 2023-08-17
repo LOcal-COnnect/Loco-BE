@@ -1,8 +1,8 @@
 package com.likelion.loco.jwt;
 
 
-import com.likelion.loco.entities.User;
 import com.likelion.loco.global.enums.RoleType;
+import com.likelion.loco.repository.InMemoryBlacklistTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -72,6 +72,20 @@ public class TokenProvider {
 
 
         return null; // Bearer Token이 없거나 역할 정보가 없는 경우
+    }
+    public String extractTokenFromRequest(HttpServletRequest request) {
+        final String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7); // "Bearer " 이후의 토큰 부분 추출
+        }
+
+        return null; // 토큰 없음
+    }
+    public  void invalidateToken(String token) {
+        // 토큰을 블랙리스트에 추가하거나 다른 방식으로 무효화하는 로직 작성
+        InMemoryBlacklistTokenRepository.addToBlacklist(token);
+
     }
 
 }

@@ -1,6 +1,7 @@
 package com.likelion.loco.service;
 
 import com.likelion.loco.dto.SellerReq;
+import com.likelion.loco.dto.SellerRes;
 import com.likelion.loco.dto.UserReq;
 import com.likelion.loco.dto.UserRes;
 import com.likelion.loco.entities.Seller;
@@ -196,8 +197,11 @@ public class UserService {
         return null;
     }
 
+    public SellerRes.GetSellerInfo getSellerInfo(Long sellerIdx){ //마이페이지 때 쓸 예정
+        return new SellerRes.GetSellerInfo(sellerRepository.findById(sellerIdx).get());
+    }
     public UserRes.UserGetRes getUserInfo(Long userIdx){ //마이페이지 때 쓸 예정
-        return new UserRes.UserGetRes(userRepository.findByUserIdx(userIdx).get());
+        return new UserRes.UserGetRes(userRepository.findById(userIdx).get());
     }
 
     public void userDelete(Long userIdx){ //회원탈퇴

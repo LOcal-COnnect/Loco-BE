@@ -42,7 +42,7 @@ public class ReviewController {
     }
 
     @GetMapping("/stores/{storeidx}")
-    public ReviewRes.ReviewListRes getAllReviewsByStoreIdx(@PathVariable("storeidx") Long storeIdx){
+    public List<ReviewRes.ReviewListRes> getAllReviewsByStoreIdx(@PathVariable("storeidx") Long storeIdx){
         try{
             return reviewService.getAllReviewByStoreIdx(storeIdx);
         }catch (Exception e){
@@ -51,7 +51,7 @@ public class ReviewController {
         return null;
     }
     @GetMapping("/users/{useridx}")
-    public List<ReviewRes.MyReviewListRes> getAllMyReviews(@PathVariable("useridx") Long userIdx){
+    public List<ReviewRes.ReviewListRes> getAllMyReviews(@PathVariable("useridx") Long userIdx){
         try{
             return reviewService.getAllMyReview(userIdx);
         }catch (Exception e){

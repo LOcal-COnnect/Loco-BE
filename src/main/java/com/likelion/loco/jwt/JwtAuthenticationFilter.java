@@ -1,5 +1,6 @@
 package com.likelion.loco.jwt;
 
+import com.likelion.loco.repository.InMemoryBlacklistTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -25,6 +26,14 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
 
     @Autowired
     private TokenProvider tokenProvider;
+    @Autowired
+    private InMemoryBlacklistTokenRepository inMemoryBlacklistTokenRepository;
+
+
+    public JwtAuthenticationFilter(TokenProvider tokenProvider, InMemoryBlacklistTokenRepository inMemoryBlacklistTokenRepository) {
+        this.inMemoryBlacklistTokenRepository = inMemoryBlacklistTokenRepository;
+        this.tokenProvider = tokenProvider;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -35,7 +44,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             System.out.println(token);
 
             // 토큰 검사하기. JWT이므로 인가 서버에 요청하지 않고도 검증 가능
-            if(token != null && !token.equalsIgnoreCase(null)) {
+            if(token != null && !token.equalsIgnoreCase(null)&& !inMemoryBlacklistTokenRepository.isTokenBlacklisted(token)) {
                 // userId 가져오기. 위조된 경우 예외 처리된다.
                 String userId = tokenProvider.validateAndGetUserId(token);
                 log.info("Authenticated user ID : " + userId);

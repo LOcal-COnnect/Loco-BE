@@ -13,41 +13,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewRes {
-    @Getter
-    @Setter
-    public static class MyReviewListRes{
-        private Long storeIdx;
-        private String storeName;
-        private String reviewer;
-        private List<Review> reviewList;
-        public MyReviewListRes(Store store, User user, List<Review> review) {
-            this.storeIdx = store.getStoreIdx();
-            this.storeName = store.getStoreName();
-            this.reviewer = user.getUserName();
-            this.reviewList = review;
-        }
 
-    }
     @Getter
     @Setter
     public static class ReviewListRes {
         private Long storeIdx;
         private String storeName;
-        private List<Review> reviewList;
+        private String reviewer;
+        private Review review;
+
 
 
         // 생성자, getter, setter 등 필요한 메서드 추가
 
         // 예시로 생성자 작성
-        public ReviewListRes(Store store, User user, List<Review> reviewList) {
+        public ReviewListRes(Store store, User user, Review review) {
             this.storeIdx = store.getStoreIdx();
             this.storeName = store.getStoreName();
-            this.reviewList = reviewList;
+            this.reviewer = user.getUserName();
+            this.review = review;
 
-            // Reviewer 정보 추가
-            for (Review review : this.reviewList) {
-                review.setUser(user); // "user" 정보 설정
-            }
         }
     }
 
