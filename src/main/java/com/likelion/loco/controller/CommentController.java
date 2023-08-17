@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/comment")
@@ -45,7 +47,7 @@ public class CommentController {
     }
 
     @GetMapping("/promotion/{promotionIdx}")
-    public CommentRes.CommentListRes getAllCommentsByPromotionIdx(@PathVariable("promotionIdx") Long promotionIdx){
+    public List<CommentRes.CommentListRes> getAllCommentsByPromotionIdx(@PathVariable("promotionIdx") Long promotionIdx){
         try{
             return commentService.getCommentByPromotionIdx(promotionIdx);
         }catch (Exception e){

@@ -10,12 +10,18 @@ import lombok.Setter;
 import java.util.List;
 
 public class CommentRes {
-    @NoArgsConstructor
-    @AllArgsConstructor
+
     @Getter
     @Setter
     public static class CommentListRes{
-        private List<Comment> commentList;
+        private Comment comment;
+        private String userName;
+
+        public CommentListRes(Comment comment) {
+            this.comment = comment;
+            this.userName = comment.getUser().getUserName();
+
+        }
     }
 
 }

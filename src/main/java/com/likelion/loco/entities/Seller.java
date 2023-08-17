@@ -33,13 +33,17 @@ public class Seller extends BaseEntity {
     @Column(name="sellerPhone",nullable = false)
     private String sellerPhone;
 
+    @Column(name="sellerAddress",nullable = false)
+    private String sellerAddress;
+
+    @Column(name = "sellerDetailAddress",nullable = false)
+    private String sellerDetailAddress;
+
     @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
     private Store store;
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
-
-
 
 
 }

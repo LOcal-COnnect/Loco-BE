@@ -1,17 +1,11 @@
 package com.likelion.loco.dto;
 
-import com.likelion.loco.entities.Category;
 import com.likelion.loco.entities.Seller;
 import com.likelion.loco.global.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 public class SellerReq {
 
@@ -25,13 +19,9 @@ public class SellerReq {
         private String sellerPassword;
         private String sellerEmail;
         private String sellerPhone;
+        private String sellerAddress;
+        private String sellerDetailAddress;
 
-        private String storeAddress;
-        private String storeDetailAddress;
-
-        private String storeName;
-        private String storePhone;
-        private String businessNumber;
 
         public Seller toEntity(RoleType roleType){
             return Seller.builder()
@@ -40,6 +30,8 @@ public class SellerReq {
                     .sellerPassword(this.sellerPassword)
                     .sellerPhone(this.sellerPhone)
                     .sellerEmail(this.sellerEmail)
+                    .sellerAddress(this.sellerAddress)
+                    .sellerDetailAddress(this.sellerDetailAddress)
                     .roleType(roleType)
                     .build();
         }
@@ -54,6 +46,8 @@ public class SellerReq {
         private String sellerPassword;
         private String sellerEmail;
         private String sellerPhone;
+        private String sellerAddress;
+        private String sellerDetailAddress;
     }
     @NoArgsConstructor
     @AllArgsConstructor

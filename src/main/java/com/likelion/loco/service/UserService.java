@@ -10,7 +10,6 @@ import com.likelion.loco.entities.User;
 import com.likelion.loco.global.BaseResponseStatus;
 import com.likelion.loco.global.enums.RoleType;
 import com.likelion.loco.jwt.TokenProvider;
-import com.likelion.loco.repository.CategoryRepository;
 import com.likelion.loco.repository.SellerRepository;
 import com.likelion.loco.repository.StoreRepository;
 import com.likelion.loco.repository.UserRepository;
@@ -26,7 +25,6 @@ public class UserService {
     private final SellerRepository sellerRepository;
     private final TokenProvider tokenProvider;
     private final StoreRepository storeRepository;
-    private final CategoryRepository categoryRepository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     private boolean doesUserExist(String userId) {return userRepository.existsByUserId(userId);}
@@ -35,12 +33,11 @@ public class UserService {
         return userRepository.existsByUserIdAndUserIdxNot(userId, userIdx) ||
                 sellerRepository.existsBySellerIdAndSellerIdxNot(userId, userIdx);
     }
-    public UserService(UserRepository userRepository, SellerRepository sellerRepository, TokenProvider tokenProvider, StoreRepository storeRepository, CategoryRepository categoryRepository) {
+    public UserService(UserRepository userRepository, SellerRepository sellerRepository, TokenProvider tokenProvider, StoreRepository storeRepository) {
         this.userRepository = userRepository;
         this.sellerRepository = sellerRepository;
         this.tokenProvider = tokenProvider;
         this.storeRepository = storeRepository;
-        this.categoryRepository = categoryRepository;
     }
 
     public BaseResponseStatus userRegister(UserReq.UserCreateReq userCreateReq){
@@ -63,26 +60,9 @@ public class UserService {
     public BaseResponseStatus sellerRegister(SellerReq.SellerCreateReq sellerCreateReq){
         try{
             if(!doesUserExist(sellerCreateReq.getSellerId()) && !doesSellerExist(sellerCreateReq.getSellerId())){ //Buyer와 Seller에 이미 있는 유저가 아니라면
-                Seller seller = new Seller();
-                seller.setSellerId(sellerCreateReq.getSellerId());
-                seller.setSellerName(sellerCreateReq.getSellerName());
-                seller.setSellerPassword(bCryptPasswordEncoder.encode(sellerCreateReq.getSellerPassword()));
-                seller.setSellerEmail(sellerCreateReq.getSellerEmail());
-                seller.setSellerPhone(sellerCreateReq.getSellerPhone());
-                seller.setRoleType(RoleType.SELLER);
-                Seller savedSeller = sellerRepository.save(seller);
+                sellerCreateReq.setSellerPassword(bCryptPasswordEncoder.encode(sellerCreateReq.getSellerPassword()));
+                sellerRepository.save(sellerCreateReq.toEntity(RoleType.SELLER));
 
-                Store store = new Store();
-                store.setSeller(savedSeller);
-                store.setStoreAddress(sellerCreateReq.getStoreAddress());
-                store.setStoreDetailAddress(sellerCreateReq.getStoreDetailAddress());
-                store.setStoreName(sellerCreateReq.getStoreName());
-                store.setStorePhone(sellerCreateReq.getStorePhone());
-                store.setBusinessNumber(sellerCreateReq.getBusinessNumber());
-                store.setCategory(categoryRepository.findById(1L).get()); //기본값으로 설정
-                store.setStoreDesc("가게설명입니다.");
-
-                storeRepository.save(store);
                 return BaseResponseStatus.SUCCESS;
             }
             else{
