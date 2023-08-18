@@ -29,9 +29,6 @@ public class StoreRes {
         private String storeLocation;
     }
 
-
-    @NoArgsConstructor
-    @AllArgsConstructor
     @Getter
     @Setter
     public static class StoreAllGetRes{
@@ -47,6 +44,5 @@ public class StoreRes {
             this.reviewList = reviewList1;
         }
     }
-
 
 }

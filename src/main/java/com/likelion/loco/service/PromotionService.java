@@ -1,5 +1,6 @@
 package com.likelion.loco.service;
 
+
 import com.likelion.loco.dto.PromotionReq;
 import com.likelion.loco.dto.PromotionRes;
 import com.likelion.loco.entities.Promotion;

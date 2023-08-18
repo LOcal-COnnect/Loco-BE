@@ -32,8 +32,4 @@ public class Review extends BaseEntity {
     @Column(name="reviewStar", nullable = false)
     private Integer reviewStar;
 
-
-
-
-
 }

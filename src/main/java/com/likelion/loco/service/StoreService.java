@@ -1,5 +1,6 @@
 package com.likelion.loco.service;
 
+
 import com.likelion.loco.dto.ProductReq;
 import com.likelion.loco.dto.StoreReq;
 import com.likelion.loco.dto.StoreRes;
@@ -30,7 +31,9 @@ public class StoreService {
 
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
+    private final GoodRepository goodRepository;
     private final StoreMineRepository storeMineRepository;
+
 
     public StoreRes.StoreCreateRes createStore(StoreReq.StoreCreateReq req) throws BaseException {
         Seller seller = sellerRepository.findById(req.getSellerIdx())
@@ -157,6 +160,7 @@ public class StoreService {
         Float avgReview = reviewRepository.avgReview(storeIdx);
 
         return new StoreRes.StoreAllGetRes(store,storeMineCount,avgReview,reviewList);
+
     }
 
 

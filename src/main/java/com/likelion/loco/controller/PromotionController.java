@@ -52,7 +52,4 @@ public class PromotionController {
         return new BaseResponse<>(promotionMyListRes);
     }
 
-
-
-
 }

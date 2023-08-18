@@ -2,6 +2,7 @@ package com.likelion.loco.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.likelion.loco.global.BaseEntity;
+import com.likelion.loco.global.enums.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,7 +43,12 @@ public class User extends BaseEntity {
     @Column(name = "userDetailAddress",nullable = false)
     private String userDetailAddress;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList;
 
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
 
 
 }

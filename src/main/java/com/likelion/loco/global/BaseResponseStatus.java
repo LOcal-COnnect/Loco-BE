@@ -24,6 +24,8 @@ public enum BaseResponseStatus {
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
+    USERS_ALREADY_EXIST(false,2011,"이미 있는 유저입니다."),
+    USERS_DUPLICATED(false,2012,"이미 있는 아이디입니다."),
 
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
@@ -43,6 +45,7 @@ public enum BaseResponseStatus {
 
     //store
     POST_STORE_NOT_FOUND(false,2022,"존재하지 않는 가게입니다."),
+
 
 
 
@@ -69,6 +72,7 @@ public enum BaseResponseStatus {
 
     //[PATCH] /users/{userIdx}
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
+    MODIFY_FAIL_COMMENT(false,4015,"댓글 수정 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),

@@ -1,5 +1,6 @@
 package com.likelion.loco.repository;
 
+
 import com.likelion.loco.entities.Store;
 import com.likelion.loco.entities.StoreMine;
 import com.likelion.loco.entities.User;
