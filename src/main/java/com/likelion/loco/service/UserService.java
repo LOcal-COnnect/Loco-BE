@@ -5,24 +5,16 @@ import com.likelion.loco.dto.SellerRes;
 import com.likelion.loco.dto.UserReq;
 import com.likelion.loco.dto.UserRes;
 import com.likelion.loco.entities.Seller;
-import com.likelion.loco.entities.Store;
 import com.likelion.loco.entities.User;
+import com.likelion.loco.global.BaseException;
 import com.likelion.loco.global.BaseResponseStatus;
 import com.likelion.loco.global.enums.RoleType;
 import com.likelion.loco.jwt.TokenProvider;
 import com.likelion.loco.repository.SellerRepository;
 import com.likelion.loco.repository.StoreRepository;
 import com.likelion.loco.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-
-
-import com.likelion.loco.entities.User;
-import com.likelion.loco.global.BaseException;
-import com.likelion.loco.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,12 +39,7 @@ public class UserService {
         return userRepository.existsByUserIdAndUserIdxNot(userId, userIdx) ||
                 sellerRepository.existsBySellerIdAndSellerIdxNot(userId, userIdx);
     }
-    public UserService(UserRepository userRepository, SellerRepository sellerRepository, TokenProvider tokenProvider, StoreRepository storeRepository) {
-        this.userRepository = userRepository;
-        this.sellerRepository = sellerRepository;
-        this.tokenProvider = tokenProvider;
-        this.storeRepository = storeRepository;
-    }
+
 
     public BaseResponseStatus userRegister(UserReq.UserCreateReq userCreateReq){
         try{
@@ -219,7 +206,7 @@ public class UserService {
     public boolean updatePassword(Long userIdx, String newPassword) throws BaseException {
         Optional<User> user = userRepository.findById(userIdx);
         user.ifPresent(u -> {
-            u.setUserPassword(newPassword);
+            u.setUserPassword(bCryptPasswordEncoder.encode(newPassword));
             userRepository.saveAndFlush(u);
         });
         return true;
