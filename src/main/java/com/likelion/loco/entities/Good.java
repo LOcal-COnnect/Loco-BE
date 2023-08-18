@@ -22,7 +22,7 @@ public class Like extends BaseEntity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="postIdx")
-    private Post post;
+    @JoinColumn(name="promotionIdx")
+    private Promotion promotion;
 
 }
