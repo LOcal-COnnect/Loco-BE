@@ -17,6 +17,9 @@ public class Seller extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sellerIdx;
+  
+    @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
+    private Store store;
 
     @Column(name="sellerId", nullable = false)
     private String sellerId;
@@ -39,11 +42,7 @@ public class Seller extends BaseEntity {
     @Column(name = "sellerDetailAddress",nullable = false)
     private String sellerDetailAddress;
 
-    @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
-    private Store store;
-
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
-
 
 }

@@ -1,6 +1,9 @@
 package com.likelion.loco.repository;
 
-import com.likelion.loco.entities.*;
+
+import com.likelion.loco.entities.Store;
+import com.likelion.loco.entities.StoreMine;
+import com.likelion.loco.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

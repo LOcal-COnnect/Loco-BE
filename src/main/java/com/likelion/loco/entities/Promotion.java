@@ -39,5 +39,4 @@ public class Promotion extends BaseEntity {
 
     @Column(name = "viewCount", nullable = false)
     private Integer viewCount;
-
 }

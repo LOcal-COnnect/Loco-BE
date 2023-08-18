@@ -21,8 +21,9 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
-    @Column(name="userId", nullable = false)
-    private String userId;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Review> reviewList = new ArrayList<>(); // 빈 리스트로 초기화
 
     @Column(name="userName",nullable = false)
     private String userName;
@@ -43,13 +44,8 @@ public class User extends BaseEntity {
     private String userDetailAddress;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Review> reviewList = new ArrayList<>(); // 빈 리스트로 초기화
-
-    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Comment> commentList;
-
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;

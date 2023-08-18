@@ -29,3 +29,4 @@ public class Good extends BaseEntity {
     private Promotion promotion;
 
 }
+

@@ -12,14 +12,10 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review,Long> {
-//    @Query(value = "SELECT avg(review.reviewStar) from Review review JOIN review.store s where s.storeIdx = :id")
-//    Float findAvgReview(@Param("id") Long id);
-
-//    @Query(value = "SELECT count(review) from Review review JOIN review.store s where s.storeIdx = :id")
-//    Integer countById(@Param("id") Long id);
 
     List<Review> findReviewsByStore(Store store);
     List<Review> findReviewsByUser(User user);
+
     @Query(value = "SELECT avg(review.reviewStar) from Review review join review.store s where s.storeIdx = :id")
     Float avgReview(@Param("id") Long id);
 

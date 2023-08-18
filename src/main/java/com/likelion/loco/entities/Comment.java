@@ -1,10 +1,13 @@
 package com.likelion.loco.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -34,4 +37,8 @@ public class Comment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="promotionIdx")
     private Promotion promotion;
+  
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }
+  

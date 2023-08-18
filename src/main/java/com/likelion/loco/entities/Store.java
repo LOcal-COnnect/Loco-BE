@@ -26,7 +26,6 @@ public class Store extends BaseEntity {
     @JoinColumn(name = "sellerIdx")
     private Seller seller;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Product> productList = new ArrayList<>(); // 빈 리스트로 초기화
 
