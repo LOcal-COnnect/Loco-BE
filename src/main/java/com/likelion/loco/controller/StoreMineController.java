@@ -71,7 +71,7 @@ public class StoreMineController {
     public ResponseEntity<List<Store>> getAllMyStoreMineList(@PathVariable("userIdx") Long userIdx) {
         try {
             List<Store> storeList = storeMineService.getMyStoreMineList(userIdx);
-            if (storeList != null && !storeList.isEmpty()) {
+            if (storeList != null) {
                 return new ResponseEntity<>(storeList, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

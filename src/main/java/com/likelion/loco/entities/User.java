@@ -46,6 +46,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Review> reviewList = new ArrayList<>(); // 빈 리스트로 초기화
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList;
+
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
