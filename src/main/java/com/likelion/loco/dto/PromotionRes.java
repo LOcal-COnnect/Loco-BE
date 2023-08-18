@@ -28,6 +28,7 @@ public class PromotionRes {
         private String promotionContent;
         private Integer viewCount;
         private Integer goods;
+        private Long storeIdx;
         private String storeName;
         private List<Comment> comments;
     }
