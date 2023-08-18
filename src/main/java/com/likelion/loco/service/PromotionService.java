@@ -57,7 +57,7 @@ public class PromotionService {
                 .orElseThrow(() -> new EntityNotFoundException("Promotion not found"));
 
         return new PromotionRes.PromotionDetailRes(promotion.getPromotionTitle(), promotion.getPromotionContent(),
-                promotion.getViewCount(), promotion.getGoods().size(), promotion.getSeller().getStore().getStoreName(),
+                promotion.getViewCount(), promotion.getGoods().size(), promotion.getSeller().getStore().getStoreIdx(), promotion.getSeller().getStore().getStoreName(),
                 promotion.getComments());
     }
 
