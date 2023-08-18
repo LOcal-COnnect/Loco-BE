@@ -4,6 +4,7 @@ import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Commnet extends BaseEntity {
+public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentIdx;
@@ -24,6 +25,13 @@ public class Commnet extends BaseEntity {
     private User user;
 
     @ManyToOne
+    @JoinColumn(name="SellerIdx")
+    private Seller seller;
+
+    @ManyToOne
     @JoinColumn(name="promotionIdx")
     private Promotion promotion;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }

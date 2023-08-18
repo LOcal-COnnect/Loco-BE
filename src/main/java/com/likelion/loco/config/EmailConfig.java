@@ -1,4 +1,4 @@
-package com.umc.BareuniBE.config;
+package com.likelion.loco.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
