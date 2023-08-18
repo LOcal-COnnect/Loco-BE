@@ -1,4 +1,4 @@
-package com.umc.BareuniBE.service;
+package com.likelion.loco.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -26,11 +26,11 @@ public class EmailServiceImpl implements EmailService{
         MimeMessage  message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to);//보내는 대상
-        message.setSubject("Bareuni 임시 비밀번호 발급입니다.");//제목
+        message.setSubject("Loco 임시 비밀번호 발급입니다.");//제목
 
         String msgg="";
         msgg+= "<div style='margin:20px;'>";
-        msgg+= "<h1> Bareuni 임시 비밀번호입니다. </h1>";
+        msgg+= "<h1> Loco 임시 비밀번호입니다. </h1>";
         msgg+= "<br>";
         msgg+= "<p>아래 임시 비밀번호를 입력해주세요.<p>";
         msgg+= "<br>";
@@ -41,7 +41,7 @@ public class EmailServiceImpl implements EmailService{
         msgg+= ePw+"</strong><div><br/> ";
         msgg+= "</div>";
         message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("bareuni_team","bareuni"));//보내는 사람
+        message.setFrom(new InternetAddress("loco_team","loco"));//보내는 사람
 
         return message;
     }

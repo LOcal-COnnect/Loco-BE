@@ -1,9 +1,12 @@
 package com.likelion.loco.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,13 +21,13 @@ public class Store extends BaseEntity {
     @Column(name = "storeIdx")
     private Long storeIdx;
 
+    @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "SellerIdx")
+    @JoinColumn(name = "sellerIdx")
     private Seller seller;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "subCategoryIdx")
-    private SubCategory subCategory;
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    private List<Product> productList = new ArrayList<>(); // 빈 리스트로 초기화
 
     @Column(name = "storeName", nullable = false)
     private String storeName;
@@ -41,7 +44,10 @@ public class Store extends BaseEntity {
     @Column(name = "storeLocation", nullable = false)
     private String storeLocation;
 
-    @Column(name = "businessNumber", nullable = false)
-    private Integer businessNumber;
+    @Column(name = "category", nullable = false)
+    private String category;
+
+    @Column(name = "businessNumber", nullable = true)
+    private String businessNumber;
 
 }

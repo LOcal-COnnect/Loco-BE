@@ -1,5 +1,6 @@
 package com.likelion.loco.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
@@ -19,6 +20,11 @@ public class Review extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "userIdx")
     private User user;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "storeIdx")
+    private Store store;
 
     @Column(name="reviewContent", nullable = false)
     private String reviewContent;

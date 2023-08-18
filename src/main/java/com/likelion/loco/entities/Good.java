@@ -11,11 +11,11 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Like extends BaseEntity {
+public class Good extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeIdx;
+    private Long goodIdx;
 
     @ManyToOne
     @JoinColumn(name="userIdx")

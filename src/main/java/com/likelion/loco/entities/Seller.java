@@ -38,7 +38,4 @@ public class Seller extends BaseEntity {
     @Column(name = "sellerDetailAddress",nullable = false)
     private String sellerDetailAddress;
 
-
-
-
 }

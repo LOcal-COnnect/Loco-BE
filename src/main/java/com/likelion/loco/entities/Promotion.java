@@ -1,9 +1,11 @@
 package com.likelion.loco.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.likelion.loco.global.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -11,19 +13,29 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post extends BaseEntity {
+public class Promotion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postIdx;
+    private Long promotionIdx;
 
     @ManyToOne
     @JoinColumn(name = "sellerIdx")
-    private User seller;
+    private Seller seller;
 
-    @Column(name = "postTitle", nullable = false)
-    private String postTitle;
+    @JsonIgnore
+    @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
-    @Column(name = "postContent", nullable = false)
-    private String postContent;
+    @JsonIgnore
+    @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL)
+    private List<Good> goods ;
 
+    @Column(name = "promotionTitle", nullable = false)
+    private String promotionTitle;
+
+    @Column(name = "promotionContent", nullable = false)
+    private String promotionContent;
+
+    @Column(name = "viewCount", nullable = false)
+    private Integer viewCount;
 }
